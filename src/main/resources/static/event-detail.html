@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chi tiết Sự kiện - Event Tickets</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    .event-banner-img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      border-radius: 1rem;
+    }
+    .schedule-item {
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s ease;
+      border-radius: 0.75rem;
+    }
+    .schedule-item:hover {
+      background-color: #f8fafc;
+      border-color: #cbd5e1;
+    }
+    .schedule-item.active {
+      background-color: #eff6ff;
+      border-color: #0d6efd;
+    }
+    .ticket-tier-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      transition: all 0.2s ease;
+    }
+    .ticket-tier-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .artist-chip {
+      background-color: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 50px;
+      padding: 0.35rem 0.75rem 0.35rem 0.35rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .artist-chip img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold text-warning" href="/index.html">
+        <i class="bi bi-ticket-perforated-fill me-2"></i>Event Tickets
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="/index.html">Trang chủ</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active fw-semibold" href="/events.html">Sự kiện</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/artists.html">Nghệ sĩ</a>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center gap-3">
+          <a href="/cart.html" class="btn btn-outline-warning position-relative px-3">
+            <i class="bi bi-cart3 me-1"></i> Giỏ vé
+            <span id="navbarCartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">
+              0
+            </span>
+          </a>
+          <a href="/my-orders.html" class="btn btn-outline-light btn-sm">Đơn hàng</a>
+          <a href="/login.html" class="btn btn-primary btn-sm px-3">Đăng nhập</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Breadcrumb -->
+  <div class="bg-white border-bottom py-2">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0 small">
+          <li class="breadcrumb-item"><a href="/index.html" class="text-decoration-none">Trang chủ</a></li>
+          <li class="breadcrumb-item"><a href="/events.html" class="text-decoration-none">Sự kiện</a></li>
+          <li class="breadcrumb-item active text-truncate" id="breadcrumbTitle" aria-current="page" style="max-width: 300px;">Chi tiết sự kiện</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
+    <div id="cartToast" class="toast align-items-center text-bg-success border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body d-flex align-items-center">
+          <i class="bi bi-check-circle-fill fs-5 me-2"></i>
+          <div>
+            <span id="toastMessage">Đã thêm vé vào giỏ hàng!</span>
+            <div class="mt-1">
+              <a href="/cart.html" class="btn btn-light btn-sm py-0 px-2 fw-semibold text-success">Xem giỏ vé ngay &raquo;</a>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="container my-4 flex-grow-1">
+
+    <div id="loadingState" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-2 text-muted">Đang tải thông tin sự kiện...</p>
+    </div>
+
+    <div id="errorState" class="alert alert-danger d-none my-4">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      <span id="errorMessage">Không tìm thấy sự kiện.</span>
+      <div class="mt-2">
+        <a href="/events.html" class="btn btn-outline-danger btn-sm">Quay lại danh sách</a>
+      </div>
+    </div>
+
+    <div id="eventDetailContent" class="d-none">
+
+      <!-- Event Header Info -->
+      <div class="row g-4 mb-5">
+        <div class="col-lg-7">
+          <img id="eventImage" src="" alt="Banner sự kiện" class="event-banner-img shadow-sm mb-3">
+        </div>
+        <div class="col-lg-5 d-flex flex-column justify-content-between">
+          <div>
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <span id="eventCreateTypeBadge"></span>
+              <span id="eventStatusBadge"></span>
+            </div>
+            <h1 id="eventTitle" class="h2 fw-bold text-dark mb-3"></h1>
+            <div class="text-muted mb-3 d-flex flex-column gap-2 small">
+              <div>
+                <i class="bi bi-building text-primary me-2"></i>
+                Đơn vị tổ chức: <strong id="eventOrganizer" class="text-dark"></strong>
+              </div>
+              <div>
+                <i class="bi bi-geo-alt-fill text-danger me-2"></i>
+                Khu vực: <strong id="eventWard" class="text-dark"></strong>
+              </div>
+            </div>
+            <hr>
+            <h2 class="h6 fw-bold text-uppercase text-muted mb-2">Giới thiệu sự kiện</h2>
+            <p id="eventDesc" class="text-secondary" style="white-space: pre-line; line-height: 1.6;"></p>
+          </div>
+
+          <div class="mt-3">
+            <a href="#bookingSection" class="btn btn-primary btn-lg w-100 rounded-pill shadow-sm fw-semibold">
+              <i class="bi bi-ticket-detailed me-2"></i>Chọn Suất Diễn & Đặt Vé
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Participating Artists -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-5 bg-white">
+        <h3 class="h5 fw-bold text-dark mb-3">
+          <i class="bi bi-people-fill text-primary me-2"></i>Nghệ Sĩ Tham Gia
+        </h3>
+        <div id="eventArtistsContainer" class="d-flex flex-wrap gap-3"></div>
+      </div>
+
+      <!-- Schedule & Ticket Booking Section -->
+      <div id="bookingSection" class="card border-0 shadow-sm rounded-4 p-4 mb-5 bg-white">
+        <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+          <div>
+            <h3 class="h4 fw-bold text-dark mb-1">
+              <i class="bi bi-calendar-event-fill text-danger me-2"></i>Suất Diễn & Hạng Vé
+            </h3>
+            <p class="text-muted small mb-0">Vui lòng chọn suất diễn để xem danh sách vé tương ứng</p>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <!-- Step 1: Select Schedule -->
+          <div class="col-lg-5 border-end-lg">
+            <h4 class="h6 fw-bold text-uppercase text-secondary mb-3">
+              1. Chọn Suất Diễn (<span id="scheduleCount">0</span>)
+            </h4>
+            <div id="schedulesList" class="d-flex flex-column gap-3"></div>
+          </div>
+
+          <!-- Step 2: Select Ticket Tier -->
+          <div class="col-lg-7">
+            <h4 class="h6 fw-bold text-uppercase text-secondary mb-3">
+              2. Chọn Hạng Vé & Số Lượng
+            </h4>
+            <div id="ticketsLoading" class="text-center py-4 d-none">
+              <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+              <span class="ms-2 small text-muted">Đang nạp hạng vé...</span>
+            </div>
+            <div id="ticketsContainer" class="d-flex flex-column gap-3"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white-50 py-4 mt-auto">
+    <div class="container text-center">
+      <p class="mb-1 fw-semibold text-white">Event Tickets &copy; 2026 - Nền tảng bán vé sự kiện trực tuyến</p>
+      <small>Dự án phân hệ Frontend 2 (FE2) - Trang công khai</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/mock/fe2-mock.js"></script>
+  <script src="/js/fe2-utils.js"></script>
+  <!-- FE3 Shopping Cart: Consumer only -->
+  <script src="/js/cart.js"></script>
+  <script src="/js/event-detail.js"></script>
+</body>
+</html>
