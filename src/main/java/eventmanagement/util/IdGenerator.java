@@ -27,6 +27,7 @@ public final class IdGenerator {
     }
 
     public static synchronized String nextId(String prefix, int width) {
+    public static String nextId(String prefix, int width) {
         if (prefix == null || prefix.isBlank()) {
             throw new IllegalArgumentException("Tiền tố không được để trống.");
         }

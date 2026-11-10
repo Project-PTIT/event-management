@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Setter
 @NoArgsConstructor
 public class Artist {
+
     @Id
     @Column(name = "artist_id", length = 20)
     private String artistId;
