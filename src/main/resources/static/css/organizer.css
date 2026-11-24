@@ -1,0 +1,38 @@
+/* Giao diện riêng cho các trang Organizer (class dùng trong organizer-*.js). Bổ sung cho style.css. */
+.org-page .heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.org-page .heading h1 { font-size: 1.5rem; margin: 0; }
+.org-page .muted { color: #6b7280; font-size: .9rem; }
+.org-page .panel { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+.org-page .panel h2 { font-size: 1.1rem; margin-bottom: 12px; }
+.org-page .toolbar { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 12px; }
+.org-page .toolbar input, .org-page .toolbar select, .org-page .field input, .org-page .field select, .org-page .field textarea {
+  width: 100%; padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 8px; background: #fff; }
+.org-page .field { display: flex; flex-direction: column; gap: 4px; }
+.org-page .field label, .org-page .field > span { font-size: .85rem; font-weight: 600; color: #374151; }
+.org-page .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 12px; }
+.org-page .form-grid .full { grid-column: 1 / -1; }
+.org-page .row-between { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.org-page .btn { display: inline-block; padding: 8px 14px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; text-decoration: none; font-weight: 600; }
+.org-page .btn-primary { background: #f59e0b; color: #fff; }
+.org-page .btn-light { background: #f3f4f6; color: #111827; border-color: #e5e7eb; }
+.org-page .btn:disabled { opacity: .6; cursor: not-allowed; }
+.org-page .table-wrap { overflow-x: auto; }
+.org-page table { width: 100%; border-collapse: collapse; }
+.org-page th, .org-page td { padding: 8px 10px; border-bottom: 1px solid #e5e7eb; text-align: left; vertical-align: top; }
+.org-page .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.org-page .notice { padding: 10px 12px; border-radius: 8px; margin-bottom: 12px; }
+.org-page .notice.success { background: #ecfdf5; color: #065f46; }
+.org-page .notice.error { background: #fef2f2; color: #991b1b; }
+.org-page .empty { text-align: center; color: #6b7280; padding: 16px; }
+.org-page .hidden { display: none; }
+.org-page .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; background: #e5e7eb; font-size: .8rem; }
+.org-page .badge-approved { background: #d1fae5; color: #065f46; }
+.org-page .badge-pending { background: #fef3c7; color: #92400e; }
+.org-page .badge-rejected { background: #fee2e2; color: #991b1b; }
+.org-page .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.org-page .stat-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; }
+.org-page .stat-card .label { color: #6b7280; font-size: .85rem; }
+.org-page .stat-card .value { font-size: 1.4rem; font-weight: 700; }
+.org-page .chart-bars { display: flex; gap: 12px; align-items: flex-end; margin-top: 16px; overflow-x: auto; }
+.org-page .bar-item { text-align: center; font-size: .8rem; min-width: 80px; }
+.org-page .bar { background: #f59e0b; border-radius: 6px 6px 0 0; }

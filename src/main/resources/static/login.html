@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Đăng nhập – EventTickets</title>
+</head>
+<body class="ev-body">
+  <header id="ev-header"></header>
+
+  <main class="ev-auth-wrap">
+    <div class="ev-auth-split">
+    <aside class="ev-auth-aside" aria-hidden="true">
+      <div class="ev-aside-kicker">Chào mừng trở lại</div>
+      <h2>Đặt vé sự kiện dễ dàng hơn</h2>
+      <p>Đăng nhập để tiếp tục đặt vé, theo dõi đơn hàng hoặc quản lý sự kiện của bạn.</p>
+      <ul class="ev-aside-list">
+        <li>Xem và đặt vé các sự kiện đã được kiểm duyệt</li>
+        <li>Theo dõi, thanh toán hoặc hủy đơn ở một nơi</li>
+        <li>Nhà tổ chức quản lý sự kiện, suất diễn và vé</li>
+      </ul>
+    </aside>
+    <div class="ev-card ev-auth-card">
+      <h1 class="ev-auth-title">Đăng nhập</h1>
+      <p class="ev-auth-sub">Chào mừng bạn quay lại EventTickets.</p>
+      <div id="alert"></div>
+
+      <form id="loginForm" novalidate>
+        <div class="mb-3 ev-field">
+          <label class="ev-label ev-req" for="email">Email</label>
+          <input type="email" class="form-control" id="email" name="email" autocomplete="username" placeholder="ten@example.com" required>
+          <div class="invalid-feedback"></div>
+        </div>
+        <div class="mb-3 ev-field">
+          <label class="ev-label ev-req" for="password">Mật khẩu</label>
+          <div class="ev-pw-wrap">
+            <input type="password" class="form-control" id="password" name="password" autocomplete="current-password" required>
+            <button type="button" class="ev-pw-toggle" data-ev-pw="password">Hiện</button>
+          </div>
+          <div class="invalid-feedback"></div>
+        </div>
+        <button type="submit" class="ev-btn ev-btn-primary ev-btn-block" id="submitBtn">Đăng nhập</button>
+      </form>
+
+      <div class="ev-auth-foot">
+        Chưa có tài khoản?
+        <a href="/register-customer.html">Đăng ký khách hàng</a> ·
+        <a href="/register-organizer.html">Đăng ký nhà tổ chức</a>
+      </div>
+    </div>
+    </div>
+  </main>
+
+  <footer id="ev-footer"></footer>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/layout.js"></script>
+  <script>
+    (async function () {
+      const form = document.getElementById('loginForm');
+      const alertBox = document.getElementById('alert');
+      const submitBtn = document.getElementById('submitBtn');
+      const next = Utils.queryParam('next');
+
+      Utils.bindPasswordToggles();
+      const current = await Layout.init({ active: '/login.html' });
+
+      // Vừa đăng xuất thì luôn hiện form (không tự chuyển trang); ngược lại, đã đăng nhập sẵn thì chuyển luôn
+      const justLoggedOut = !!Utils.queryParam('loggedout');
+      if (current && !justLoggedOut) { Auth.redirectAfterLogin(current, next); return; }
+
+      if (justLoggedOut) Utils.showAlert(alertBox, 'success', 'Bạn đã đăng xuất.');
+      else if (Utils.queryParam('expired')) Utils.showAlert(alertBox, 'warning', 'Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại.');
+      else if (Utils.queryParam('registered')) Utils.showAlert(alertBox, 'success', 'Đăng ký thành công. Hãy đăng nhập để tiếp tục.');
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        Utils.clearAlert(alertBox);
+        Utils.clearFieldErrors(form);
+
+        const email = form.email.value.trim();
+        const password = form.password.value;
+        let valid = true;
+        if (!email) { Utils.setFieldError(form, 'email', 'Vui lòng nhập email.'); valid = false; }
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { Utils.setFieldError(form, 'email', 'Email không hợp lệ.'); valid = false; }
+        if (!password) { Utils.setFieldError(form, 'password', 'Vui lòng nhập mật khẩu.'); valid = false; }
+        if (!valid) return;
+
+        Utils.setLoading(submitBtn, true, 'Đang đăng nhập...');
+        try {
+          const user = await Auth.login(email, password);
+          form.password.value = '';
+          await Auth.redirectAfterLogin(user, next);
+        } catch (err) {
+          Utils.setLoading(submitBtn, false);
+          if (!Utils.showFieldErrors(form, err.data)) Utils.showAlert(alertBox, 'danger', err.message);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
