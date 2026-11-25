@@ -1,5 +1,5 @@
 DROP DATABASE IF EXISTS event_tickets;
-CREATE DATABASE event_tickets CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE event_tickets
 USE event_tickets;
 
 CREATE TABLE people (
@@ -145,7 +145,6 @@ CREATE TABLE order_detail (
 
 INSERT INTO people (id, `name`, email, phone_number, `password`) VALUES
 ('AD01', 'Bùi Ngọc Hải', 'admin01@event.vn', '0901000001', '$2b$12$fHd7KgQAy6YPgvHbmtaIEONbmRAoplerJ33TwvNWkC2QwwcaNhOJK'),
-('AD02', 'Phạm Hoàng Hiệp', 'admin02@event.vn', '0901000002', '$2b$12$fHd7KgQAy6YPgvHbmtaIEONbmRAoplerJ33TwvNWkC2QwwcaNhOJK'),
 ('TC001', 'Công ty Giải trí M-TP Entertainment', 'contact@mtpentertainment.vn', '0902000001', '$2b$12$fHd7KgQAy6YPgvHbmtaIEONbmRAoplerJ33TwvNWkC2QwwcaNhOJK'),
 ('TC002', 'Viet Vision Entertainment', 'info@vietvision.vn', '0902000002', '$2b$12$fHd7KgQAy6YPgvHbmtaIEONbmRAoplerJ33TwvNWkC2QwwcaNhOJK'),
 ('TC003', 'SpaceSpeakers Group', 'booking@spacespeakers.vn', '0902000003', '$2b$12$fHd7KgQAy6YPgvHbmtaIEONbmRAoplerJ33TwvNWkC2QwwcaNhOJK'),
@@ -160,8 +159,7 @@ INSERT INTO people (id, `name`, email, phone_number, `password`) VALUES
 ('KH008', 'Bùi Hải Đăng', 'haidang.bui@gmail.com', '0911000008', '$2b$12$fHd7KgQAy6YPgvHbmtaIEONbmRAoplerJ33TwvNWkC2QwwcaNhOJK');
 
 INSERT INTO `admin` (admin_id) VALUES
-('AD01'),
-('AD02');
+('AD01');
 
 INSERT INTO organizer (organizer_id, tax_code, address) VALUES
 ('TC001', '0314159265', 'Tầng 5, Tòa nhà Bitexco, Quận 1, TP. Hồ Chí Minh'),
@@ -304,9 +302,9 @@ INSERT INTO artist (artist_id, artist_name, nationality, image, bio) VALUES
 
 INSERT INTO `event` (event_id, organizer_id, title, image, `desc`, create_type, `status`) VALUES
 ('SK01', 'TC001', 'SKY TOUR HÀ NỘI 2026', 'https://dingtea.vn/images/skytour1.png', 'Đại nhạc hội âm nhạc và ánh sáng đỉnh cao của Sơn Tùng M-TP cùng dàn khách mời đặc biệt.', 'YEARLY', 'APPROVED'),
-('SK02', 'TC002', 'STORII CONCERT: NGƯỜI GIỮ MÙA XUÂN', '/images/events/storii-concert.svg', 'Đêm nhạc trữ tình sâu lắng cùng Hà Anh Tuấn và các giọng ca hàng đầu Việt Nam.', 'YEARLY', 'APPROVED'),
-('SK03', 'TC003', 'KOSMIK LIVE CONCERT', '/images/events/kosmik.svg', 'Bữa tiệc Hip-hop & R&B bùng nổ kỷ niệm chặng đường âm nhạc của SpaceSpeakers.', 'YEARLY', 'APPROVED'),
-('SK04', 'TC004', 'ĐÊM NHẠC PHÒNG TRÀ: KHÚC TÌNH THU', '/images/events/khuc-tinh-thu.svg', 'Không gian âm nhạc acoustic ấm cúng tại Nhà hát Lớn Hà Nội.', 'MONTHLY', 'APPROVED'),
+('SK02', 'TC002', 'STORII CONCERT: NGƯỜI GIỮ MÙA XUÂN', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEcHe3qFWkK17V3P_DKpFawIiNhJ7zTtfu_WlSfYxRPg&s=10', 'Đêm nhạc trữ tình sâu lắng cùng Hà Anh Tuấn và các giọng ca hàng đầu Việt Nam.', 'YEARLY', 'APPROVED'),
+('SK03', 'TC003', 'KOSMIK LIVE CONCERT', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJlSXqWxi6laB3GilfGGggnfzP7h7aHUPLl3pDRXFytg&s=10', 'Bữa tiệc Hip-hop & R&B bùng nổ kỷ niệm chặng đường âm nhạc của SpaceSpeakers.', 'YEARLY', 'APPROVED'),
+('SK04', 'TC004', 'ĐÊM NHẠC PHÒNG TRÀ: KHÚC TÌNH THU', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxR0UJZyhg9Y783QOy42ajhKeX1FgPmWZ0yeiZcNwYdA&s=10', 'Không gian âm nhạc acoustic ấm cúng tại Nhà hát Lớn Hà Nội.', 'MONTHLY', 'APPROVED'),
 ('SK05', 'TC002', 'GENFEST: CỔNG ÂM NHẠC ĐA GIÁC QUAN', '/images/events/genfest.svg', 'Lễ hội âm nhạc dành cho thế hệ trẻ với sự góp mặt của các nghệ sĩ GenZ đình đám.', 'YEARLY', 'PENDING'),
 ('SK06', 'TC004', 'GALA HÀI KỊCH CUỐI TUẦN', '/images/events/gala-hai.svg', 'Chương trình biểu diễn nghệ thuật tạp kỹ hàng tuần.', 'WEEKLY', 'REJECTED');
 
@@ -377,7 +375,6 @@ INSERT INTO order_detail (order_id, ticket_id, quantity, price) VALUES
 ('DH008', 'TK006', 2, 1200000),
 ('DH008', 'TK010', 1, 2800000);
 
--- Đơn mẫu đang chờ Admin duyệt hoàn tiền (khách KH001 đã gửi yêu cầu)
 INSERT INTO `order` (order_id, customer_id, created_at, total_amount, `status`, payment_method, payment_at, refund_reason, refund_requested_at) VALUES
 ('DH009', 'KH001', '2026-11-22 10:00:00', 1200000, 'Chờ hoàn tiền', 'Ví điện tử', '2026-11-22 10:02:00', 'Tôi có việc đột xuất nên không đi được.', '2026-11-24 09:00:00');
 
