@@ -1,5 +1,5 @@
 DROP DATABASE IF EXISTS event_tickets;
-CREATE DATABASE event_tickets
+CREATE DATABASE event_tickets;
 USE event_tickets;
 
 CREATE TABLE people (
